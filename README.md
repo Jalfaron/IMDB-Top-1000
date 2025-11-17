@@ -1,11 +1,35 @@
 # IMDB-Top-1000
+
 Top 1000 películas IMDB
-Este repositorio contiene una lista de las 1000 películas mejor calificadas en IMDB, junto con información relevante como el título, año de lanzamiento, género, director y calificación.
-Descargué una base de datos de Kaggle, creada por Harshit Shankhdhar.
 
-La cargamos y mostramos las primeras filas:
+Este repositorio contiene una lista de las 1000 películas mejor calificadas en IMDB, junto con información relevante como el título, año de lanzamiento, género, director y calificación. Descargué una base de datos de Kaggle, creada por Harshit Shankhdhar.
 
-df_imdb <- read.csv("imdb_1000.csv")
+Cargamos la base y mostramos las primeras filas:
+
+df_imdb \<- read.csv("imdb_1000.csv")
 
 head(df_imdb)
 
+Seleccionamos las columnas relevantes: series_title, released_year, genre, director, imdb_rating, Star1, Star2, Star3, Star4
+
+selected_columns \<- c("series_title", "released_year", "genre", "director", "imdb_rating", "Star1", "Star2", "Star3", "Star4")
+
+Y creamos un nuevo objeto con ellas
+
+df_select \<- df_imdb \|\> select("Series_Title", "Released_Year", "Genre", "Director", "IMDB_Rating", "Star1", "Star2", "Star3", "Star4")
+
+Seleccionamos las películas con calificación mayor a 8.5
+
+df_high_rating \<- df_select \|\> filter(IMDB_Rating \> 8.5)
+
+Mostramos las primeras filas del nuevo objeto
+
+head(df_high_rating)
+
+Ahora las ordenamos por año de lanzamiento
+
+df_sorted \<- df_high_rating \|\> arrange(Released_Year) head(df_sorted)
+
+Creamos un gráfico de barras con ggplot2 para visualizar la cantidad de películas por año de lanzamiento
+
+ggplot(df_sorted, aes(x = Released_Year)) + geom_bar(fill = "blue") + labs(title = "Cantidad de películas por año de lanzamiento", x = "Año de lanzamiento", y = "Cantidad de películas") + theme_minimal()
