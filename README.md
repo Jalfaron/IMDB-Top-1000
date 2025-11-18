@@ -14,22 +14,32 @@ Seleccionamos las columnas relevantes: series_title, released_year, genre, direc
 
 selected_columns \<- c("series_title", "released_year", "genre", "director", "imdb_rating", "Star1", "Star2", "Star3", "Star4")
 
-Y creamos un nuevo objeto con ellas
+Y creamos un nuevo objeto con ellas:
 
 df_select \<- df_imdb \|\> select("Series_Title", "Released_Year", "Genre", "Director", "IMDB_Rating", "Star1", "Star2", "Star3", "Star4")
 
-Seleccionamos las películas con calificación mayor a 8.5
+Seleccionamos las películas con calificación mayor a 8.5 usando:
 
 df_high_rating \<- df_select \|\> filter(IMDB_Rating \> 8.5)
 
-Mostramos las primeras filas del nuevo objeto
+Mostramos las primeras filas del nuevo objeto usando:
 
 head(df_high_rating)
 
-Ahora las ordenamos por año de lanzamiento
+Ahora las ordenamos por año de lanzamiento usando:
 
 df_sorted \<- df_high_rating \|\> arrange(Released_Year) head(df_sorted)
 
 Creamos un gráfico de barras con ggplot2 para visualizar la cantidad de películas por año de lanzamiento
 
 ggplot(df_sorted, aes(x = Released_Year)) + geom_bar(fill = "blue") + labs(title = "Cantidad de películas por año de lanzamiento", x = "Año de lanzamiento", y = "Cantidad de películas") + theme_minimal()
+
+Ahora revisaremos la cantidad de películas por género usando:
+
+df_genre_count \<- df_sorted \|\> group_by(Genre) \|\> summarise(count = n()) \|\> arrange(desc(count))
+
+Lo visualizaremos en un gráfico de barras:
+
+ggplot(df_genre_count, aes(x = reorder(Genre, -count), y = count)) + geom_bar(stat = "identity", fill = "green") + labs(title = "Cantidad de películas por género", x = "Género", y = "Cantidad de películas") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
