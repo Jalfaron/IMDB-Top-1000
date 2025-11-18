@@ -42,4 +42,26 @@ Lo visualizaremos en un gráfico de barras:
 
 ggplot(df_genre_count, aes(x = reorder(Genre, -count), y = count)) + geom_bar(stat = "identity", fill = "green") + labs(title = "Cantidad de películas por género", x = "Género", y = "Cantidad de películas") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+Queremos saber cuáles son los directores con más películas en esta lista. Usamos:
+df_director_count <- df_sorted |> 
+group_by(Director) |> 
+summarise(count = n()) |> 
+arrange(desc(count)) |> 
+head(10)
+
+Y lo visualizamos con un gráfico de barras:
+ggplot(df_director_count, aes(x = reorder(Director, -count), y = count)) + geom_bar(stat = "identity", fill = "red") + labs(title = "Top 10 directores con más películas", x = "Director", y = "Cantidad de películas") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+Ahora queremos ver los actores más frecuentes en estas películas. Usamos:
+
+df_actors <- df_sorted |> 
+select(Star1, Star2, Star3, Star4) |> 
+pivot_longer(cols = everything(), names_to = "Star", values_to = "Actor") |> 
+group_by(Actor) |> summarise(count = n()) |> 
+arrange(desc(count)) |> head(10)
+
+Y lo visualizamos con un gráfico de barras:
+
+ggplot(df_actors, aes(x = reorder(Actor, -count), y = count)) + geom_bar(stat = "identity", fill = "purple") + labs(title = "Top 10 actores con más películas", x = "Actor", y = "Cantidad de películas") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 
