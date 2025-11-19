@@ -1,17 +1,19 @@
 ---
-editor_options: 
-  markdown: 
-    wrap: 72
+title: "Tarea_2"
+author: "Revisión Soledad Araya"
+date: "2025-11-19"
+output: html_document
 ---
 
-# IMDB-Top-1000
+Este repositorio contiene una lista de las 1000 películas mejor calificadas en IMDB, junto con información relevante como el título, año de lanzamiento, género, director y calificación.
 
-Este repositorio contiene una lista de las 1000 películas mejor
-calificadas en IMDB, junto con información relevante como el título, año
-de lanzamiento, género, director y calificación.
+Descargué una base de datos de Kaggle, creada por Harshit Shankhdhar.
 
-[Descargué una base de datos de Kaggle, creada por Harshit
-Shankhdhar](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows).
+Librerías:
+
+```{r}
+library(tidyverse)
+```
 
 Cargamos la base y mostramos las primeras filas:
 
@@ -27,8 +29,7 @@ df_imdb <- df_imdb |>
   janitor::clean_names()
 ```
 
-Seleccionamos las columnas relevantes:
-`series_title, released_year, genre, director, imdb_rating, Star1, Star2, Star3, Star4`.
+Seleccionamos las columnas relevantes: `series_title, released_year, genre, director, imdb_rating, Star1, Star2, Star3, Star4`.
 
 Y creamos un nuevo objeto con ellas:
 
@@ -53,13 +54,13 @@ head(df_high_rating)
 Ahora las ordenamos por año de lanzamiento usando:
 
 ```{r}
-df_sorted <- df_high_rating |> arrange(released_year) 
+df_sorted <- df_high_rating |> 
+  arrange(released_year) 
 
 head(df_sorted)
 ```
 
-Creamos un gráfico de barras con ggplot2 para visualizar la cantidad de
-películas por año de lanzamiento:
+Creamos un gráfico de barras con ggplot2 para visualizar la cantidad de películas por año de lanzamiento:
 
 ```{r}
 ggplot(df_sorted, aes(x = as.numeric(released_year))) + 
@@ -71,7 +72,9 @@ ggplot(df_sorted, aes(x = as.numeric(released_year))) +
   theme_minimal()
 ```
 
-![](/plots/plot_anio_lanzamiento.png)
+```{r}
+ggsave("plots/plot_anio_lanzamiento.png", width = 8, height = 7)
+```
 
 Ahora revisaremos la cantidad de películas por género usando:
 
@@ -94,10 +97,11 @@ ggplot(df_genre_count, aes(x = reorder(genre, -count), y = count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![](/plots/plot_genero.png)
+```{r}
+ggsave("plots/plot_genero.png", width = 8, height = 7)
+```
 
-Queremos saber cuáles son los directores con más películas en esta
-lista. Usamos:
+Queremos saber cuáles son los directores con más películas en esta lista. Usamos:
 
 ```{r}
 df_director_count <- df_sorted |> 
@@ -110,7 +114,6 @@ df_director_count <- df_sorted |>
 Y lo visualizamos con un gráfico de barras:
 
 ```{r}
-
 ggplot(df_director_count, aes(x = reorder(director, -count), y = count)) + 
   geom_bar(stat = "identity", fill = "red") + 
   labs(title = "Top 10 directores con más películas", 
@@ -120,10 +123,11 @@ ggplot(df_director_count, aes(x = reorder(director, -count), y = count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![](/plots/plot_director.png)
+```{r}
+ggsave("plots/plot_director.png", width = 8, height = 7)
+```
 
-Ahora queremos ver los actores más frecuentes en estas películas.
-Usamos:
+Ahora queremos ver los actores más frecuentes en estas películas. Usamos:
 
 ```{r}
 df_actors <- df_sorted |> 
@@ -147,6 +151,9 @@ ggplot(df_actors, aes(x = reorder(actor, -count), y = count)) +
        y = "Cantidad de películas") + 
   theme_minimal() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
-![](/plots/plot_actor.png)
+```{r}
+ggsave("plots/plot_actor.png", width = 8, height = 7)
+```
